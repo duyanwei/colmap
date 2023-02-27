@@ -61,6 +61,7 @@ add_subdirectory(util)
 if (GUI_ENABLED)
     add_subdirectory(ui)
 endif()
+add_subdirectory(gtsfm)
 
 COLMAP_ADD_LIBRARY(colmap ${COLMAP_SOURCES})
 

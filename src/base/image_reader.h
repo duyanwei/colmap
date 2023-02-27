@@ -113,6 +113,7 @@ class ImageReader {
   Status Next(Camera* camera, Image* image, Bitmap* bitmap, Bitmap* mask);
   size_t NextIndex() const;
   size_t NumImages() const;
+  const ImageReaderOptions& GetOptions() const { return options_; }
 
  private:
   // Image reader options.

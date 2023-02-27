@@ -147,6 +147,7 @@ class Bitmap {
   // is embedded in the bitmap.
   bool ExifCameraModel(std::string* camera_model) const;
   bool ExifFocalLength(double* focal_length) const;
+  int ExifFocalLengthGTSFM(double* focal_length) const;
   bool ExifLatitude(double* latitude) const;
   bool ExifLongitude(double* longitude) const;
   bool ExifAltitude(double* altitude) const;

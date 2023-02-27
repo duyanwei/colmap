@@ -238,6 +238,8 @@ bool RefineAbsolutePose(const AbsolutePoseRefinementOptions& options,
                              tvec->data(), camera->ParamsData());
   }
 
+  double* qvec_data = qvec->data();
+  double* tvec_data = tvec->data();
   if (problem.NumResiduals() > 0) {
     SetQuaternionManifold(&problem, qvec_data);
 
