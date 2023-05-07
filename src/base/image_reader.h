@@ -70,7 +70,7 @@ struct ImageReaderOptions {
   bool single_camera_per_folder = false;
 
   // Whether to use a different camera for each image.
-  bool single_camera_per_image = false;
+  bool single_camera_per_image = true;
 
   // Whether to explicitly use an existing camera for all images. Note that in
   // this case the specified camera model and parameters are ignored.

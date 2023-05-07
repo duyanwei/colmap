@@ -205,6 +205,9 @@ bool RefineAbsolutePose(const AbsolutePoseRefinementOptions& options,
   CHECK_EQ(points2D.size(), points3D.size());
   options.Check();
 
+  double* qvec_data = qvec->data();
+  double* tvec_data = tvec->data();
+
   ceres::LossFunction* loss_function =
       new ceres::CauchyLoss(options.loss_function_scale);
 
