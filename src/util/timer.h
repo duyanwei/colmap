@@ -33,6 +33,7 @@
 #define COLMAP_SRC_UTIL_TIMER_H_
 
 #include <chrono>
+#include <string>
 
 namespace colmap {
 
@@ -51,9 +52,9 @@ class Timer {
   double ElapsedMinutes() const;
   double ElapsedHours() const;
 
-  void PrintSeconds() const;
-  void PrintMinutes() const;
-  void PrintHours() const;
+  void PrintSeconds(const std::string& prefix = "") const;
+  void PrintMinutes(const std::string& prefix = "") const;
+  void PrintHours(const std::string& prefix = "") const;
 
  private:
   bool started_;

@@ -62,6 +62,7 @@ if (GUI_ENABLED)
     add_subdirectory(ui)
 endif()
 add_subdirectory(gtsfm)
+add_subdirectory(good_graph)
 
 COLMAP_ADD_LIBRARY(colmap ${COLMAP_SOURCES})
 

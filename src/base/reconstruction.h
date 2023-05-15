@@ -47,6 +47,7 @@
 #include "base/similarity_transform.h"
 #include "base/track.h"
 #include "estimators/similarity_transform.h"
+#include "good_graph/types.h"
 #include "optim/loransac.h"
 #include "util/alignment.h"
 #include "util/types.h"
@@ -385,6 +386,10 @@ class Reconstruction {
   // Create all image sub-directories in the given path.
   void CreateImageDirs(const std::string& path) const;
 
+  // For GoodGraph benchmark.
+  void UpdateBAStats(const std::string& name,
+                     const good_graph::GraphMetaInfo& gg_meta);
+
  private:
   size_t FilterPoints3DWithSmallTriangulationAngle(
       const double min_tri_angle,
@@ -410,6 +415,7 @@ class Reconstruction {
   void WriteCamerasBinary(const std::string& path) const;
   void WriteImagesBinary(const std::string& path) const;
   void WritePoints3DBinary(const std::string& path) const;
+  void WriteStats(const std::string& path) const;
 
   void SetObservationAsTriangulated(const image_t image_id,
                                     const point2D_t point2D_idx,
@@ -430,6 +436,9 @@ class Reconstruction {
 
   // Total number of added 3D points, used to generate unique identifiers.
   point3D_t num_added_points3D_;
+
+  // Collect BA computation stats.
+  good_graph::GraphStatsSummaryPtr gg_stats_ptr_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

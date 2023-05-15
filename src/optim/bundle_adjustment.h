@@ -178,6 +178,18 @@ class BundleAdjuster {
   // Get the Ceres solver summary for the last call to `Solve`.
   const ceres::Solver::Summary& Summary() const;
 
+  size_t NumCameras() const { return camera_ids_.size(); }
+  size_t NumPoints() const { return point3D_num_observations_.size(); }
+  size_t NumObservations() const {
+    return std::accumulate(
+        point3D_num_observations_.cbegin(), point3D_num_observations_.cend(),
+        0u,
+        [](size_t sum,
+           const std::unordered_map<point3D_t, size_t>::value_type& v) {
+          return sum + v.second;
+        });
+  }
+
  private:
   void SetUp(Reconstruction* reconstruction,
              ceres::LossFunction* loss_function);

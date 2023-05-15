@@ -76,7 +76,7 @@ class AutomaticReconstructionController : public Thread {
 
 // Whether to perform dense mapping.
 #ifdef CUDA_ENABLED
-    bool dense = true;
+    bool dense = false;
 #else
     bool dense = false;
 #endif

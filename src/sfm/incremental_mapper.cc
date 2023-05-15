@@ -630,7 +630,13 @@ IncrementalMapper::AdjustLocalBundle(
 
     // Adjust the local bundle.
     BundleAdjuster bundle_adjuster(ba_options, ba_config);
+    Timer lba_timer;
+    lba_timer.Start();
     bundle_adjuster.Solve(reconstruction_);
+    reconstruction_->UpdateBAStats(
+        "lba",
+        {lba_timer.ElapsedSeconds(), ba_config.NumImages(),
+         bundle_adjuster.NumPoints(), bundle_adjuster.NumObservations()});
 
     report.num_adjusted_observations =
         bundle_adjuster.Summary().num_residuals / 2;
@@ -702,9 +708,14 @@ bool IncrementalMapper::AdjustGlobalBundle(
 
   // Run bundle adjustment.
   BundleAdjuster bundle_adjuster(ba_options, ba_config);
+  Timer gba_timer;
+  gba_timer.Start();
   if (!bundle_adjuster.Solve(reconstruction_)) {
     return false;
   }
+  reconstruction_->UpdateBAStats(
+      "gba", {gba_timer.ElapsedSeconds(), ba_config.NumImages(),
+              bundle_adjuster.NumPoints(), bundle_adjuster.NumObservations()});
 
   // Normalize scene for numerical stability and
   // to avoid large scale changes in viewer.

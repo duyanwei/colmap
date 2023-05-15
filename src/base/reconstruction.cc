@@ -45,7 +45,9 @@
 namespace colmap {
 
 Reconstruction::Reconstruction()
-    : correspondence_graph_(nullptr), num_added_points3D_(0) {}
+    : correspondence_graph_(nullptr),
+      num_added_points3D_(0),
+      gg_stats_ptr_(new good_graph::GraphStatsSummary()) {}
 
 std::unordered_set<point3D_t> Reconstruction::Point3DIds() const {
   std::unordered_set<point3D_t> point3D_ids;
@@ -744,7 +746,10 @@ void Reconstruction::Read(const std::string& path) {
   }
 }
 
-void Reconstruction::Write(const std::string& path) const { WriteBinary(path); }
+void Reconstruction::Write(const std::string& path) const {
+  WriteBinary(path);
+  WriteStats(path);
+}
 
 void Reconstruction::ReadText(const std::string& path) {
   ReadCamerasText(JoinPaths(path, "cameras.txt"));
@@ -2073,6 +2078,33 @@ void Reconstruction::WritePoints3DBinary(const std::string& path) const {
       WriteBinaryLittleEndian<point2D_t>(&file, track_el.point2D_idx);
     }
   }
+}
+
+void Reconstruction::UpdateBAStats(const std::string& name,
+                                   const good_graph::GraphMetaInfo& gg_meta) {
+  gg_stats_ptr_->update(name, gg_meta);
+}
+
+void Reconstruction::WriteStats(const std::string& path) const {
+  gg_stats_ptr_->write(JoinPaths(path, "gg"));
+
+  // save sfm stats
+  std::string filename = JoinPaths(path, "gg_stats.txt");
+  std::ofstream file(filename, std::ios::trunc);
+  CHECK(file.is_open()) << filename;
+
+  // Ensure that we don't loose any precision by storing in text.
+  file.precision(7);
+
+  file << "# cams_num imgs_num reg_imgs_num pts_num obs_num mean_track_length "
+          "mean_obs_per_reg_img mean_reproj_error"
+       << std::endl;
+  file << NumCameras() << " " << NumImages() << " " << NumRegImages() << " "
+       << NumPoints3D() << " " << ComputeNumObservations() << " "
+       << ComputeMeanTrackLength() << " "
+       << ComputeMeanObservationsPerRegImage() << " "
+       << ComputeMeanReprojectionError() << std::endl;
+  file.close();
 }
 
 void Reconstruction::SetObservationAsTriangulated(

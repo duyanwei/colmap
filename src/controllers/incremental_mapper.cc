@@ -343,7 +343,7 @@ void IncrementalMapperController::Run() {
   }
 
   std::cout << std::endl;
-  GetTimer().PrintMinutes();
+  GetTimer().PrintMinutes("SparseMapper");
 }
 
 bool IncrementalMapperController::LoadDatabase() {
