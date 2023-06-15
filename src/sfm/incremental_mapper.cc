@@ -105,6 +105,7 @@ IncrementalMapper::IncrementalMapper(const DatabaseCache* database_cache)
       prev_init_image_pair_id_(kInvalidImagePairId) {}
 
 void IncrementalMapper::BeginReconstruction(Reconstruction* reconstruction) {
+  gg_reconstruct_timer_.Start();
   CHECK(reconstruction_ == nullptr);
   reconstruction_ = reconstruction;
   reconstruction_->Load(*database_cache_);
@@ -136,6 +137,11 @@ void IncrementalMapper::EndReconstruction(const bool discard) {
     for (const image_t image_id : reconstruction_->RegImageIds()) {
       DeRegisterImageEvent(image_id);
     }
+  }
+
+  if (!discard) {
+    reconstruction_->UpdateBAStats("reconstruct",
+                                   {gg_reconstruct_timer_.ElapsedSeconds()});
   }
 
   reconstruction_->TearDown();

@@ -38,6 +38,7 @@
 #include "optim/bundle_adjustment.h"
 #include "sfm/incremental_triangulator.h"
 #include "util/alignment.h"
+#include "util/timer.h"
 
 namespace colmap {
 
@@ -306,6 +307,8 @@ class IncrementalMapper {
   // This image list will be non-empty, if the reconstruction is continued from
   // an existing reconstruction.
   std::unordered_set<image_t> existing_image_ids_;
+
+  Timer gg_reconstruct_timer_;
 };
 
 }  // namespace colmap
